@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { spawn } from 'child_process';
 import run from './run.js';
 import fs from 'fs';
+import axios from 'axios';
 
 const app = express();
 
@@ -100,7 +101,7 @@ const template1 = `<section class="detailedresult-section">
 
 // Routes
 app.get('/index', (req, res) => {
-    res.render('index'); 
+    res.render('index');
 });
 
 app.get('/predict', (req, res) => {
@@ -127,7 +128,23 @@ app.post('/predict', async (req, res) => {
         userInputs.push(parseInt(req.body[symptom] || 0));  // Ensure input is numeric (0 or 1)
     }
 
-    let result = await runPythonScript(userInputs);
+
+
+    // API URL
+    const API_URL = 'https://disease-prediction-service.onrender.com/predict';
+
+
+    let result = "An error occurred. Please try again.";
+    // Send POST request to the Flask API
+    try {
+        result = await axios.post(API_URL, userInputs);
+        result = result.data.predicted_disease;
+
+    } catch (error) {
+
+    }
+
+
     let prompt = `the patient has ${result} so ,tell me which specialist should he consult`;
     let result2 = await run(prompt);
 
