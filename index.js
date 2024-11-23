@@ -131,7 +131,7 @@ app.post('/predict', async (req, res) => {
 
 
     // API URL
-    const API_URL = 'https://disease-prediction-specialist-suggestion.onrender.com/predict';
+    const API_URL = 'https://disease-prediction-service.onrender.com/predict';
 
 
     let result = "An error occurred. Please try again.";
